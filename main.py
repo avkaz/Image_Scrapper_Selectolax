@@ -2,7 +2,6 @@ from httpx import get
 from selectolax.parser import HTMLParser
 
 
-
 def get_img_tags_for(term =None):
     if not term:
         raise Exception('No search term provided')
@@ -33,7 +32,7 @@ def get_high_res_img_url(img_node):
         return url_res[0][0].split("?")[0]
 
 if __name__ == '__main__':
-    img_nodes = get_img_tags_for('galaxy')
+    img_nodes = get_img_tags_for('cars')
     all_img_urls = [get_high_res_img_url(i) for i in img_nodes]
     img_urls = [u for u in all_img_urls if u]
 
