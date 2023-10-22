@@ -1,5 +1,10 @@
 from httpx import get
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG,
+                    format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 def get_response_for(keyword, results_per_page, page = 1):
     url = f"https://unsplash.com/napi/search/photos?page={page}&per_page={results_per_page}&query={keyword}&xp=plus-freq%3Acontrol"
@@ -19,8 +24,10 @@ def get_image_urls(data):
 def download_images(img_urls, max_download, dest_dir="images", tag=""):
     successfully_downloaded = 0
 
+
     for url in img_urls:
         if successfully_downloaded < max_download:
+            logging.info(f"Downloading {url}...")
             resp = get(url)
             file_name = url.split("/")[-1]
 
@@ -29,6 +36,7 @@ def download_images(img_urls, max_download, dest_dir="images", tag=""):
             with open(f"{dest_dir}/{tag}/{tag}{file_name}.jpeg", "wb") as f:
                 f.write(resp.content)
                 successfully_downloaded += 1
+                logging.info(f"Saved {file_name}, with size {round(len(resp.content)/1024/1024,2)} MB.")
         else:
             break
 
@@ -53,4 +61,4 @@ def scrape(keyword, num_of_results):
             break
 
 if __name__ == '__main__':
-    scrape("microphone", 40)
+    scrape("phone", 3)
